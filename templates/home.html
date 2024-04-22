@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+{% block title %}
+Trading algorithm
+{% endblock %}
+{% block content %}
+<p>In this page you can run the DQN model algorithm. Please refer to the "About the model" page for information on the DQN model and its parameters</p>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #000000;
+    }
+    tr:nth-child(even) {
+        background-color: #000000;
+    }
+</style>
+
+<form action="{{ url_for('run_model') }}" method= "post">
+    <label for="ticker" class="parameter-entry">Enter Stock Ticker: </label>
+    <input type="text" id="ticker" name="ticker">
+    
+    <label for="start_date" class="parameter-entry">Start Date: </label>
+    <input type="date" id="start_date" name="start_date" required>
+
+    <label for="end_date" class="parameter-entry">End Date: </label>
+    <input type="date" id="end_date" name="end_date" required>
+
+    <label for="data_split" class="parameter-entry"> Training Set Percentage (e.g. 80 for 80%): </label>
+    <input type="number" id="data_split" name="data_split" min = "0" max="100" required>
+
+    <label for="dqn_params_run_1" class="parameter-entry">DQN Parameters for Run 1 (in JSON format): </label>
+    <textarea id="dqn_params_run_1" name="dqn_params_run_1" rows="10" cols="50" required>
+    {
+      "hidden_size": 100, 
+      "epoch_num": 20, 
+      "memory_size": 500, 
+      "batch_size": 32, 
+      "train_freq": 4, 
+      "update_q_freq": 100, 
+      "gamma": 0.99, 
+      "epsilon_decay_divisor": 1, 
+      "start_reduce_epsilon": 100
+    }
+    </textarea>
+    
+    <label for="dqn_params_run_2" class="parameter-entry"> DQN Parameters for Run 2: </label>
+    <textarea id="dqn_params_run_2" name= "dqn_params_run_2" rows="10" cols="50" required>
+    {
+        "hidden_size": 150, 
+        "epoch_num": 20, 
+        "memory_size": 1000, 
+        "batch_size": 32, 
+        "train_freq": 4, 
+        "update_q_freq": 200, 
+        "gamma": 0.99, 
+        "epsilon_decay_divisor": 0.8, 
+        "start_reduce_epsilon": 200
+        }
+    </textarea>
+
+    <label for="dqn_params_run_3" class="parameter-entry"> DQN Parameters for Run 3: </label>
+    <textarea id ="dqn_params_run_3" name="dqn_params_run_3" rows="10" cols="50" required>
+    {
+        "hidden_size": 80, 
+        "epoch_num": 20, 
+        "memory_size": 500, 
+        "batch_size": 64, 
+        "train_freq": 10, 
+        "update_q_freq": 50, 
+        "gamma": 0.95, 
+        "epsilon_decay_divisor": 1.5, 
+        "start_reduce_epsilon": 50
+        }
+    </textarea>
+
+    <input type="submit" value="Run Model">
+</form>
+
+{% for data in data_from_tests %}
+    <h2> {{data['run_name']}} </h2>
+    {% if data['epoch_data'] %}
+        <h3>Training Epoch Data:</h3>
+        <table>
+            <tr>
+                <th>EPOCH</th>
+                <th>EPSILON</th>
+                <th>TOTAL STEP</th>
+                <th>FINAL RETURN</th>
+                <th>ELAPSED TIME</th>
+                <th>FINAL PORTFOLIO VALUE</th>
+            </tr>
+            {% for epoch in data['epoch_data'] %}
+                <tr>
+                    <td>{{ epoch['epoch'] }}</td>
+                    <td>{{ epoch['epsilon'] }}</td>
+                    <td>{{ epoch['total_step'] }}</td>
+                    <td>{{ epoch['final_return'] }}</td>
+                    <td>{{ epoch['elapsed_time'] }}</td>
+                    <td>{{ epoch['final_portfolio_value'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if data['episode_data'] %}
+        <h3> Test Episode Data: </h3>
+        <table>
+            <tr>
+                <th>EPISODE</th>
+                <th>EPSILON</th>
+                <th>TOTAL STEP</th>
+                <th>FINAL RETURN</th>
+                <th>ELAPSED TIME</th>
+                <th>FINAL PORTFOLIO VALUE</th>
+            </tr>
+            {% for episode in data['episode_data'] %}
+                <tr>
+                    <td>{{ episode['episode'] }}</td>
+                    <td>{{ episode['epsilon'] }}</td>
+                    <td>{{ episode['total_step'] }}</td>
+                    <td>{{ episode['final_return'] }}</td>
+                    <td>{{ episode['elapsed_time'] }}</td>
+                    <td>{{ episode['final_portfolio_value'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
+
+{% if plot_for_stock_data %}
+    <h3> Stock plot for {{ticker}} </h3>
+    <img src = "data:image/png;base64,{{ plot_for_stock_data }}">
+{% endif %}
+
+
+{% if plot_encoded_dict %}
+    {% for run_name, plot_encoded in plot_encoded_dict.items() %}
+        <h3> {{run_name}} </h3>
+        <img src = "data:image/png;base64,{{ plot_encoded }}">
+    {% endfor %}
+{% endif %}
+
+{% if trading_statistics %}
+    <h3> Statistics of test runs </h3>
+    <table>
+        <tr>
+            <th> File name </th>
+            <th> Total trades</th>
+            <th> Win percentage </th>
+            <th> Cumulative return </th>
+            <th> Max drawdown </th>
+            <th> Sharpe ratio </th>
+            <th> Sortino ratio </th>
+        </tr>
+        {% for trading_stats in trading_statistics %}
+        <tr>
+            <td> {{trading_stats['file_name']}} </td>
+            <td> {{trading_stats['total_trades']}} </td>
+            <td> {{trading_stats['win_percentage']}} </td>
+            <td> {{trading_stats['cumulative_return']}} </td>
+            <td> {{trading_stats['max_drawdown']}} </td>
+            <td> {{trading_stats['sharpe_ratio']}} </td>
+            <td> {{trading_stats['sortino_ratio']}} </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% endblock %}

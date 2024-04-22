@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
+    </head>
+
+    <body>
+        <div class="navbar">
+            <a href="{{ url_for('home') }}" class="navbar-brand">HOME</a>
+            <a href="{{ url_for('about') }}" class="navbar-item">ABOUT THE MODEL</a>
+            <a href="{{ url_for('contact') }}" class="navbar-item">CONTACT</a>
+        </div>
+
+        <div class="body-content">
+            {% block content %}
+            {% endblock %}
+            <hr/>
+            <footer>
+                <p>&copy; 2024 All Rights Reserved by SA Augustas Model Agency</p>
+                <p>Disclaimer: Model is only for educational purposes</p>
+            </footer>
+        </div>
+    </body>
+</html>

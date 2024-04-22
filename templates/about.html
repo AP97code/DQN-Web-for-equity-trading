@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}
+DQN Info
+{% endblock %}
+{% block content %}
+<h1>About the DQN Model</h1>
+
+<h2>What is Deep Q-Network (DQN)?</h2>
+<p>
+Deep Q-Network (DQN) is an advanced machine learning model that combines the traditional Q-Learning algorithm with deep neural networks. 
+</p>
+<p>
+This model excels in complex decision-making environments by learning to recognize patterns and predicting actions that maximize potential rewards over time.
+</p>
+
+<img src="{{ url_for('static', filename='DQN.jpg') }}" alt="DQN architecture" style ="width: 600px; height: auto;">
+
+<p>Deep Q-Network (DQN) architecture</p>
+<p></p>
+
+<img src="{{ url_for('static', filename='QNETWORK.jpg') }}" alt="QNETWORK" style ="width: 600px; height: auto;">
+<p>Q-Network process</p>
+
+<p>
+In the realm of Deep Q-Network (DQN) architecture, the agent is at the heart of decision-making. 
+</p>
+
+<p> It observes a state s from the environment and feeds this information into a Deep Neural Network (DNN).  </p>
+<p> This network, parameterized by θ, processes the state through multiple layers to determine the best policy πθ(s, a).</p>
+<p> The policy dictates the probability of taking each possible action a given the current state s. </p>
+<p> Once the agent selects an action based on this policy, it performs the action in the environment.</p>
+
+<p>The environment, in turn, responds to the action by providing a reward r and transitioning to a new state s'. </p>
+
+<p>This reward serves as feedback, indicating the effectiveness of the chosen action. The agent then observes the new state, effectively closing the loop. </p>
+
+<p>This cycle of observing states, taking actions, receiving rewards, and observing new states enables the DQN agent to learn over time which actions yield the highest cumulative rewards.</p>
+
+<p>Through continuous interaction with the environment and iterative updates to the policy, the DQN model seeks to optimize the decision-making process for tasks such as playing games or trading stocks, aiming to maximize the total reward over the long term.</p>
+
+<h2>DQN in Simple Terms</h2>
+<p>Imagine you're teaching a child to stack blocks, rewarding them with a treat for each successful attempt. Over time, the child learns that careful stacking leads to more treats.</p>
+<p>DQN operates similarly, but in the context of the stock market, making trading decisions based on historical outcomes to 'stack up' rewards. </p>
+
+<p>
+The simple process of the model is defined below.
+</p>
+<img src="{{ url_for('static', filename='PROCESS.jpg') }}" alt="PROCESS" style ="width: 50; height: 100;">
+
+
+<h2>How the Model Works</h2>
+<p>The journey of a DQN model begins with downloading historical stock data, followed by a meticulous cleaning process. A simulated environment is created to mirror market behaviors, within which the DQN model learns and refines its trading strategy. </p>
+
+<p>This model undergoes training and testing phases, with performance data and results visualized through comprehensive graphs.</p>
+
+<p>
+    <strong>Key parameters used in the DQN model are: </strong>
+</p>
+<div>
+    <ul>
+        <li class="list-item-separator"> <strong>hidden_size:</strong> This parameter specifies the number of neurons in each hidden layer of the neural network. A larger hidden_size such as 500 might allow the network to capture more complex patterns in the data. However, it also increases the risk of overfitting and requires more computational resources.</li>
+        <li class="list-item-separator"> <strong>epoch_num:</strong> This is the number of complete passes through the entire training dataset. Here, epoch_num is set to 10, meaning the DQN will go through the training data 10 times during the learning process.</li>
+        <li class="list-item-separator"> <strong>memory_size:</strong> In reinforcement learning, agents learn from experiences. memory_size refers to the number of past experiences the agent stores in memory. A memory_size of 300 means the agent keeps the most recent 300 experiences for learning, which it will use for making future decisions. </li>
+        <li class="list-item-separator"> <strong> batch_size:</strong> This is the number of experiences sampled from memory to update the model at each training step. A batch_size of 40 means that in each learning step, 40 randomly selected past experiences are used to train the network. </li>
+        <li class="list-item-separator"> <strong>train_freq:</strong> This parameter indicates how often the training process occurs. With train_freq set to 400, it means the model updates its neural network parameters after every 400 actions taken in the environment. </li>
+        <li class="list-item-separator"> <strong>update_q_freq:</strong> DQN algorithms use a technique called 'fixed Q-targets' for stability. update_q_freq specifies how often the target network (which predicts the next state's Q-values) is updated with the weights of the current network. Here, it's updated every 100 steps.</li>
+        <li class="list-item-separator"> <strong>gamma:</strong> This is the discount factor used in the calculation of the cumulative reward. It determines the importance of future rewards. A gamma of 0.97 means that future rewards are almost as important as immediate rewards, reflecting a long-term strategy. </li>
+        <li class="list-item-separator"> <strong>epsilon_decay_divisor: </strong>This is related to the exploration-exploitation trade-off in reinforcement learning. epsilon determines the probability of taking a random action (exploration), and as it decays, the model relies more on learned strategies (exploitation). The epsilon_decay_divisor affects the rate at which epsilon decays; here, an epsilon_decay_divisor of 1.2 suggests a moderate decay rate.</li>
+        <li class="list-item-separator"> <strong>start_reduce_epsilon:</strong> This specifies the step at which the model should start reducing the exploration rate epsilon. With start_reduce_epsilon set to 500, the DQN model will begin to rely less on random exploration and more on its learned policy after 500 steps.</li>
+    </ul>
+</div>
+
+<h2>The Significance of DQN in Trading</h2>
+<p>
+DQN models signify a major advancement in automated trading systems, showcasing the potential of artificial intelligence in financial decision-making. While they do not guarantee success, they provide a sophisticated approach to understanding and operating within financial markets.
+</p>
+
+{% endblock %}

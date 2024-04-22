@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<p>Meet the person behind the DQN model creation</p>
+
+<img src="{{ url_for('static', filename='AP_profile.jpg') }}" alt="Augustas Perminas Profile Picture" style ="width: 200px; height: auto;">
+
+<h1> Augustas Perminas </h1>
+<h2> Aspiring data scientist </h2>
+
+<div>
+    <h3>EDUCATION:</h3>
+    <ul>
+        <li class="list-item-separator">MSc in Data Science and Decision Analysis (expected to graduate in 2024 June), Stockholm University</li>
+        <li class="list-item-separator">Bachelor's in International Business, major in finance (2019), graduated with distinction from Grenoble Ecole de Management</li>
+    </ul>
+</div>
+
+<div>
+    <h3>EXPERIENCE:</h3>
+    <ul>
+        <li class="list-item-separator">Management Consultant in Ernst&Young</li>
+        <li class="list-item-separator">Hedge Fund financial analyst in utility industry</li>
+        <li class="list-item-separator">Private Equity Fund financial analyst in sustainable timberland and farmland industries</li>
+        <li class="list-item-separator">Private banking associate in Deutsche banking</li>
+    </ul>
+</div>
+
+<div>
+    <h3>Contact: https://www.linkedin.com/in/augustas-perminas/</h3>
+</div>
+{% endblock %}
